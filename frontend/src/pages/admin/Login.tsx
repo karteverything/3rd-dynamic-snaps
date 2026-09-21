@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 
@@ -9,7 +9,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
     setError("");
 
@@ -28,8 +30,13 @@ export default function Login() {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm">
-        <h1 className="text-3xl font-light">Admin login</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm"
+      >
+        <h1 className="text-3xl font-light">
+          Admin login
+        </h1>
 
         <div className="mt-8 space-y-4">
           <input

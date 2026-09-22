@@ -6,6 +6,10 @@ import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
 
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import AdminPhotos from "./pages/admin/AdminPhotos";
+import AdminLogin from "./pages/admin/AdminLogin";
 
 function App() {
   return (
@@ -17,6 +21,14 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/contact" element={<Contact />} />
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/admin/photos"
+            element={<AdminPhotos />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

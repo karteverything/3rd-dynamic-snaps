@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const links = [
   { name: "Home", path: "/" },
@@ -8,12 +8,19 @@ const links = [
 ];
 
 export default function Navbar() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   return (
-    <header className="absolute left-0 right-0 top-0 z-50">
+    <header
+      className={`absolute left-0 right-0 top-0 z-50 ${
+        isHome ? "text-white" : "text-neutral-950"
+      }`}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7">
         <NavLink
           to="/"
-          className="text-sm font-medium tracking-tight text-white"
+          className="text-sm font-medium tracking-[0.12em]"
         >
           3RD DYNAMIC SNAPS
         </NavLink>
@@ -24,10 +31,10 @@ export default function Navbar() {
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                `text-xs uppercase tracking-[0.2em] transition ${
+                `text-[11px] uppercase tracking-[0.2em] transition ${
                   isActive
-                    ? "text-white"
-                    : "text-white/60 hover:text-white"
+                    ? "opacity-100"
+                    : "opacity-50 hover:opacity-100"
                 }`
               }
             >
@@ -37,8 +44,8 @@ export default function Navbar() {
         </nav>
 
         <button
-          className="text-xs uppercase tracking-[0.2em] text-white md:hidden"
           type="button"
+          className="text-[11px] uppercase tracking-[0.2em] md:hidden"
         >
           Menu
         </button>

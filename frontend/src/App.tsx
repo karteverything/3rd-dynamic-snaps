@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -24,10 +24,8 @@ function App() {
 
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/admin/photos"
-            element={<AdminPhotos />}
-          />
+          <Route path="/admin" element={<Navigate to="/admin/photos" replace />} />
+          <Route path="/admin/photos" element={<AdminPhotos />} />
         </Route>
       </Routes>
     </BrowserRouter>

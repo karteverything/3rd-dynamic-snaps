@@ -29,6 +29,7 @@ export interface Photo {
   is_featured: boolean;
   is_published: boolean;
   created_at?: string;
+  url: string;
 }
 
 export interface PricingPackage {

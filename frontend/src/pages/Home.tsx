@@ -1,8 +1,31 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import PageLayout from "../components/PageLayout";
 import SafeImage from "../components/SafeImage";
 
+import { api, type Photo } from "../lib/api";
+import { getPhotoUrl } from "../lib/images";
+
 export default function Home() {
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(true);
+
+  useEffect(() => {
+    async function loadPhotos() {
+      try {
+        const data = await api.getPhotos();
+        setPhotos(data);
+      } catch (error) {
+        console.error("Failed to load photos:", error);
+      } finally {
+        setLoadingPhotos(false);
+      }
+    }
+
+    loadPhotos();
+  }, []);
+
   return (
     <PageLayout>
       {/* Hero */}
@@ -102,32 +125,40 @@ export default function Home() {
           </div>
 
           <div className="mt-16 grid gap-5 md:grid-cols-2">
-            {/* Large image */}
-            <div className="image-hover md:row-span-2">
-              <SafeImage
-                src="../public/photo-1.jpg"
-                alt="Photography work"
-                className="h-[520px] w-full object-cover sm:h-[650px]"
-              />
-            </div>
+            {loadingPhotos ? (
+              <>
+                <div className="h-[520px] animate-pulse bg-neutral-200 sm:h-[650px]" />
 
-            {/* Top image */}
-            <div className="image-hover">
-              <SafeImage
-                src="../public/photo-2.jpg"
-                alt="Photography work"
-                className="h-[300px] w-full object-cover sm:h-[360px]"
-              />
-            </div>
+                <div className="h-[300px] animate-pulse bg-neutral-200 sm:h-[360px]" />
 
-            {/* Bottom image */}
-            <div className="image-hover">
-              <SafeImage
-                src="../public/photo-3.jpg"
-                alt="Photography work"
-                className="h-[300px] w-full object-cover sm:h-[360px]"
-              />
-            </div>
+                <div className="h-[300px] animate-pulse bg-neutral-200 sm:h-[360px]" />
+              </>
+            ) : photos.length === 0 ? (
+              <div className="col-span-full border border-dashed border-neutral-300 py-20 text-center">
+                <p className="eyebrow text-neutral-400">
+                  No published photographs
+                </p>
+              </div>
+            ) : (
+              photos.slice(0, 3).map((photo, index) => (
+                <div
+                  key={photo.id}
+                  className={`image-hover ${
+                    index === 0 ? "md:row-span-2" : ""
+                  }`}
+                >
+                  <SafeImage
+                    src={getPhotoUrl(photo.storage_path)}
+                    alt={photo.alt_text || photo.filename}
+                    className={
+                      index === 0
+                        ? "h-[520px] w-full sm:h-[650px]"
+                        : "h-[300px] w-full sm:h-[360px]"
+                    }
+                  />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

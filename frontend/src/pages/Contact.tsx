@@ -11,96 +11,126 @@ export default function Contact() {
 
   return (
     <PageLayout>
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="grid gap-16 lg:grid-cols-2">
+      <section className="mx-auto max-w-7xl px-6 pb-32 pt-40">
+        <div className="grid gap-20 lg:grid-cols-2">
           <div>
-            <p className="text-sm uppercase tracking-[0.25em] text-neutral-500">
+            <p className="eyebrow text-neutral-400">
               Contact
             </p>
 
-            <h1 className="mt-6 text-5xl font-light tracking-tight sm:text-7xl">
+            <h1 className="page-title mt-7">
               Let's create
               <br />
               something.
             </h1>
 
-            <p className="mt-8 max-w-lg leading-8 text-neutral-600">
-              Tell me a little about your shoot, event or project
-              and I'll get back to you.
+            <p className="body-copy mt-10 max-w-md">
+              Tell me a little about your shoot, event or
+              project and I'll get back to you.
             </p>
 
-            <div className="mt-12 space-y-3 text-sm text-neutral-600">
-              <p>hello@3rddynamicsnaps.com</p>
-              <p>South Africa</p>
+            <div className="mt-14 text-sm">
+              <p className="text-neutral-400">
+                Email
+              </p>
+
+              <p className="mt-2">
+                hello@3rddynamicsnaps.com
+              </p>
+
+              <p className="mt-8 text-neutral-400">
+                Location
+              </p>
+
+              <p className="mt-2">
+                South Africa
+              </p>
             </div>
           </div>
 
           <div>
             {submitted ? (
-              <div className="border border-neutral-200 p-8">
-                <h2 className="text-2xl font-light">
+              <div className="border-t border-neutral-200 py-10">
+                <p className="eyebrow text-neutral-400">
+                  Message sent
+                </p>
+
+                <h2 className="section-title mt-6">
                   Thank you.
                 </h2>
 
-                <p className="mt-4 text-neutral-600">
-                  Your message has been received.
+                <p className="body-copy mt-6">
+                  Your message has been received. I'll be in
+                  touch soon.
                 </p>
+
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-8 text-[11px] uppercase tracking-[0.2em] underline underline-offset-8"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="space-y-6"
+                className="border-t border-neutral-200"
               >
-                <div>
-                  <label className="mb-2 block text-sm">
+                <div className="border-b border-neutral-200 py-6">
+                  <label className="eyebrow text-neutral-400">
                     Name
                   </label>
 
                   <input
                     type="text"
                     required
-                    className="w-full border border-neutral-300 px-4 py-3 outline-none focus:border-black"
+                    className="mt-4 w-full bg-transparent text-lg outline-none placeholder:text-neutral-300"
+                    placeholder="Your name"
                   />
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-sm">
+                <div className="border-b border-neutral-200 py-6">
+                  <label className="eyebrow text-neutral-400">
                     Email
                   </label>
 
                   <input
                     type="email"
                     required
-                    className="w-full border border-neutral-300 px-4 py-3 outline-none focus:border-black"
+                    className="mt-4 w-full bg-transparent text-lg outline-none placeholder:text-neutral-300"
+                    placeholder="you@example.com"
                   />
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-sm">
+                <div className="border-b border-neutral-200 py-6">
+                  <label className="eyebrow text-neutral-400">
                     Phone
                   </label>
 
                   <input
                     type="tel"
-                    className="w-full border border-neutral-300 px-4 py-3 outline-none focus:border-black"
+                    className="mt-4 w-full bg-transparent text-lg outline-none placeholder:text-neutral-300"
+                    placeholder="Optional"
                   />
                 </div>
 
-                <div>
-                  <label className="mb-2 block text-sm">
+                <div className="border-b border-neutral-200 py-6">
+                  <label className="eyebrow text-neutral-400">
                     Message
                   </label>
 
                   <textarea
                     required
-                    rows={6}
-                    className="w-full resize-none border border-neutral-300 px-4 py-3 outline-none focus:border-black"
+                    rows={5}
+                    className="mt-4 w-full resize-none bg-transparent text-lg outline-none placeholder:text-neutral-300"
+                    placeholder="Tell me about your project..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="bg-black px-8 py-4 text-sm uppercase tracking-widest text-white transition hover:bg-neutral-800"
+                  className="mt-8 bg-black px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-white transition hover:bg-neutral-800"
                 >
                   Send enquiry
                 </button>

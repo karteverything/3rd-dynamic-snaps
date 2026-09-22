@@ -9,30 +9,39 @@ const links = [
 
 export default function Navbar() {
   return (
-    <header className="border-b border-neutral-200 bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <header className="absolute left-0 right-0 top-0 z-50">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7">
         <NavLink
           to="/"
-          className="text-lg font-medium tracking-tight"
+          className="text-sm font-medium tracking-tight text-white"
         >
-          3rd Dynamic Snaps
+          3RD DYNAMIC SNAPS
         </NavLink>
 
-        <nav className="flex gap-6 text-sm">
+        <nav className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                isActive
-                  ? "font-medium text-black"
-                  : "text-neutral-500 transition hover:text-black"
+                `text-xs uppercase tracking-[0.2em] transition ${
+                  isActive
+                    ? "text-white"
+                    : "text-white/60 hover:text-white"
+                }`
               }
             >
               {link.name}
             </NavLink>
           ))}
         </nav>
+
+        <button
+          className="text-xs uppercase tracking-[0.2em] text-white md:hidden"
+          type="button"
+        >
+          Menu
+        </button>
       </div>
     </header>
   );

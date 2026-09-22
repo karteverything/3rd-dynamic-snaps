@@ -13,7 +13,7 @@ export default function PageLayout({
     <div className="min-h-screen bg-white text-neutral-950">
       <Navbar />
 
-      <main>{children}</main>
+      <main className="page-enter">{children}</main>
 
       <Footer />
     </div>

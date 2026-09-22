@@ -14,14 +14,21 @@ export default function Home() {
 
   useEffect(() => {
     async function loadPhotos() {
-      const data = await api.getPhotos();
-      setPhotos(data);
-      const urls: Record<string, string> = {};
+      try {
+        const data = await api.getPhotos();
+        setPhotos(data);
+        const urls: Record<string, string> = {};
 
-      for (const photo of data) {
-        urls[photo.id] = await getPhotoUrl(photo.storage_path);
+        for (const photo of data) {
+          urls[photo.id] = await getPhotoUrl(photo.storage_path);
+        }
+
+        setPhotoUrls(urls);
+      } catch (error) {
+        console.error("Unable to load photos:", error);
+      } finally {
+        setLoadingPhotos(false);
       }
-      setPhotoUrls(urls);
     }
     loadPhotos();
   }, []);

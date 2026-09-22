@@ -1,105 +1,139 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
+import PageLayout from "../components/PageLayout";
+
+const photos = [
+  {
+    src: "/images/photo-1.jpg",
+    alt: "Photography work",
+  },
+  {
+    src: "/images/photo-2.jpg",
+    alt: "Photography work",
+  },
+  {
+    src: "/images/photo-3.jpg",
+    alt: "Photography work",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
-      <Navbar />
+    <PageLayout>
+      {/* Hero */}
+      <section className="relative flex min-h-[75vh] items-end overflow-hidden bg-neutral-900">
+        <img
+          src="/images/hero.jpg"
+          alt="Featured photography"
+          className="absolute inset-0 h-full w-full object-cover opacity-80"
+        />
 
-      <main>
-        <section className="relative flex min-h-screen items-end overflow-hidden">
-          <img
-            src="/images/hero.jpg"
-            alt="Featured photograph"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+        <div className="absolute inset-0 bg-black/30" />
 
-          <div className="absolute inset-0 bg-black/25" />
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 text-white">
+          <p className="mb-4 text-sm uppercase tracking-[0.3em]">
+            Photography
+          </p>
 
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 lg:px-10 lg:pb-20">
-            <p className="mb-5 text-xs uppercase tracking-[0.3em]">
-              Photographer
-            </p>
+          <h1 className="max-w-4xl text-5xl font-light tracking-tight sm:text-7xl">
+            Moments worth
+            <br />
+            remembering.
+          </h1>
 
-            <h1 className="max-w-3xl text-5xl font-light leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
-              Stories
-              <br />
-              in light.
-            </h1>
+          <p className="mt-6 max-w-xl text-lg text-white/80">
+            Authentic photography capturing people,
+            places and moments with intention.
+          </p>
 
-            <a
-              href="#work"
-              className="mt-10 inline-block border-b border-white/60 pb-2 text-xs uppercase tracking-[0.25em]"
+          <Link
+            to="/contact"
+            className="mt-8 inline-block border border-white px-6 py-3 text-sm uppercase tracking-widest transition hover:bg-white hover:text-black"
+          >
+            Get in touch
+          </Link>
+        </div>
+      </section>
+
+      {/* Intro */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="max-w-2xl">
+          <p className="text-sm uppercase tracking-[0.25em] text-neutral-500">
+            01 — About the work
+          </p>
+
+          <h2 className="mt-6 text-4xl font-light tracking-tight sm:text-5xl">
+            Photography that feels natural, honest and timeless.
+          </h2>
+
+          <p className="mt-8 leading-8 text-neutral-600">
+            Every photograph tells a story. My approach is simple:
+            create images that feel genuine and preserve the
+            moments that matter.
+          </p>
+
+          <Link
+            to="/about"
+            className="mt-8 inline-block text-sm uppercase tracking-widest underline underline-offset-8"
+          >
+            More about me
+          </Link>
+        </div>
+      </section>
+
+      {/* Selected Work */}
+      <section className="bg-neutral-100 py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <p className="text-sm uppercase tracking-[0.25em] text-neutral-500">
+            02 — Selected work
+          </p>
+
+          <h2 className="mt-4 text-4xl font-light tracking-tight">
+            Recent photographs
+          </h2>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {photos.map((photo, index) => (
+              <img
+                key={photo.src}
+                src={photo.src}
+                alt={photo.alt}
+                className={`w-full object-cover ${
+                  index === 0
+                    ? "md:row-span-2 md:h-full"
+                    : "h-80"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="mt-10">
+            <Link
+              to="/contact"
+              className="text-sm uppercase tracking-widest underline underline-offset-8"
             >
-              Explore the work
-            </a>
+              Book a session
+            </Link>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="bg-white px-6 py-28 text-neutral-950 lg:px-10 lg:py-40">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
-              Photography with intention
-            </p>
+      {/* CTA */}
+      <section className="mx-auto max-w-7xl px-6 py-28 text-center">
+        <p className="text-sm uppercase tracking-[0.25em] text-neutral-500">
+          Let's create something
+        </p>
 
-            <h2 className="mt-6 text-4xl font-light leading-tight sm:text-5xl">
-              Honest moments.
-              <br />
-              Beautifully preserved.
-            </h2>
+        <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-light tracking-tight sm:text-6xl">
+          Have a story worth capturing?
+        </h2>
 
-            <p className="mx-auto mt-8 max-w-xl text-base leading-8 text-neutral-600">
-              A short introduction to the photographer and the way they
-              approach their work.
-            </p>
-          </div>
-        </section>
-
-        <section
-          id="work"
-          className="bg-white px-6 pb-28 text-neutral-950 lg:px-10 lg:pb-40"
+        <Link
+          to="/contact"
+          className="mt-10 inline-block bg-black px-8 py-4 text-sm uppercase tracking-widest text-white transition hover:bg-neutral-800"
         >
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-3xl font-light sm:text-4xl">
-                Selected work
-              </h2>
-
-              <span className="text-xs uppercase tracking-[0.2em] text-neutral-400">
-                01 — 06
-              </span>
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              <img
-                src="/images/photo-1.jpg"
-                alt="Selected photograph"
-                className="aspect-[4/5] w-full object-cover"
-              />
-
-              <img
-                src="/images/photo-2.jpg"
-                alt="Selected photograph"
-                className="mt-0 aspect-[4/5] w-full object-cover sm:mt-24"
-              />
-
-              <img
-                src="/images/photo-3.jpg"
-                alt="Selected photograph"
-                className="aspect-[4/5] w-full object-cover"
-              />
-
-              <img
-                src="/images/photo-4.jpg"
-                alt="Selected photograph"
-                className="mt-0 aspect-[4/5] w-full object-cover sm:mt-24"
-              />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
-    </div>
+          Contact me
+        </Link>
+      </section>
+    </PageLayout>
   );
 }

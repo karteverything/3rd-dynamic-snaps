@@ -150,6 +150,27 @@ export default function AdminPhotos() {
                       ? "Published"
                       : "Unpublished"}
                   </p>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await api.updatePhoto(photo.id, {
+                          is_published: !photo.is_published,
+                        });
+
+                        await loadPhotos();
+                      } catch (error) {
+                        console.error(error);
+                        setMessage("Failed to update photo.");
+                      }
+                    }}
+                    className="mt-5 border border-neutral-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-900 hover:text-white"
+                  >
+                    {photo.is_published
+                      ? "Unpublish"
+                      : "Publish"}
+                  </button>
                 </div>
               </article>
             ))}

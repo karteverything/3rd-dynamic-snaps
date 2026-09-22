@@ -11,7 +11,6 @@ const links = [
 export default function Navbar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-
   const isHome = location.pathname === "/";
 
   function closeMenu() {

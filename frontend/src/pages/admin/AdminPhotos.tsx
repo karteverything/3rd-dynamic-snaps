@@ -12,7 +12,7 @@ export default function AdminPhotos() {
     setLoading(true);
 
     try {
-      const data = await api.getPhotos();
+      const data = await api.getAdminPhotos();
       setPhotos(data);
     } catch (error) {
       console.error(error);

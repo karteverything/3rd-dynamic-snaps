@@ -1,35 +1,39 @@
 import { NavLink } from "react-router-dom";
 
 const links = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/pricing", label: "Pricing" },
-  { to: "/contact", label: "Contact" },
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Pricing", path: "/pricing" },
+  { name: "Contact", path: "/contact" },
 ];
 
 export default function Navbar() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
+    <header className="border-b border-neutral-200 bg-white">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <NavLink
           to="/"
-          className="text-sm font-medium uppercase tracking-[0.25em]"
+          className="text-lg font-medium tracking-tight"
         >
-          Jane Doe
+          3rd Dynamic Snaps
         </NavLink>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <nav className="flex gap-6 text-sm">
           {links.map((link) => (
             <NavLink
-              key={link.to}
-              to={link.to}
-              className="text-xs uppercase tracking-[0.2em] opacity-80 transition-opacity hover:opacity-100"
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                isActive
+                  ? "font-medium text-black"
+                  : "text-neutral-500 transition hover:text-black"
+              }
             >
-              {link.label}
+              {link.name}
             </NavLink>
           ))}
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
   );
 }

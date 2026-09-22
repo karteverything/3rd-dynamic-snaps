@@ -37,7 +37,7 @@ export default function SafeImage({
         alt={alt}
         onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
-        className={`h-full w-full object-cover transition duration-700 ${
+        className={`h-full w-full object-cover object-center transition duration-700 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
         {...props}

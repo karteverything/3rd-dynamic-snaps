@@ -1,5 +1,3 @@
-import { api } from "./api";
-
 export async function getPhotoUrl(
   storagePath: string,
 ): Promise<string> {

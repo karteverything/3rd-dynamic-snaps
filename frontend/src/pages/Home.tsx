@@ -9,20 +9,20 @@ import { getPhotoUrl } from "../lib/images";
 
 export default function Home() {
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
   const [loadingPhotos, setLoadingPhotos] = useState(true);
 
   useEffect(() => {
     async function loadPhotos() {
-      try {
-        const data = await api.getPhotos();
-        setPhotos(data);
-      } catch (error) {
-        console.error("Failed to load photos:", error);
-      } finally {
-        setLoadingPhotos(false);
-      }
-    }
+      const data = await api.getPhotos();
+      setPhotos(data);
+      const urls: Record<string, string> = {};
 
+      for (const photo of data) {
+        urls[photo.id] = await getPhotoUrl(photo.storage_path);
+      }
+      setPhotoUrls(urls);
+    }
     loadPhotos();
   }, []);
 
@@ -30,8 +30,8 @@ export default function Home() {
     <PageLayout>
       {/* Hero */}
       <section className="relative flex min-h-screen items-end overflow-hidden bg-neutral-950">
-        <SafeImage
-          src="../public/hero.jpg"
+        <img
+          src="/hero.jpg"
           alt="Featured photography"
           className="absolute inset-0 h-full w-full object-cover"
         />
@@ -148,7 +148,7 @@ export default function Home() {
                   }`}
                 >
                   <SafeImage
-                    src={getPhotoUrl(photo.storage_path)}
+                    src={photoUrls[photo.id]}
                     alt={photo.alt_text || photo.filename}
                     className={
                       index === 0

@@ -127,15 +127,16 @@ export default function Home() {
             {loadingPhotos ? (
               <>
                 <div className="h-[520px] animate-pulse bg-neutral-200 sm:h-[650px]" />
-
                 <div className="h-[300px] animate-pulse bg-neutral-200 sm:h-[360px]" />
-
                 <div className="h-[300px] animate-pulse bg-neutral-200 sm:h-[360px]" />
               </>
             ) : photos.length === 0 ? (
-              <div className="col-span-full border border-dashed border-neutral-300 py-20 text-center">
+              <div className="md:col-span-2 border-t border-neutral-300 py-12">
                 <p className="eyebrow text-neutral-400">
                   No published photographs
+                </p>
+                <p className="mt-4 text-sm text-neutral-500">
+                  Published photographs will appear here.
                 </p>
               </div>
             ) : (
@@ -148,12 +149,12 @@ export default function Home() {
                 >
                   <SafeImage
                     src={photo.url}
-                    alt={photo.alt_text || photo.filename}
-                    className={
+                    alt={photo.alt_text || "Photography work"}
+                    className={`w-full object-cover ${
                       index === 0
-                        ? "h-[520px] w-full sm:h-[650px]"
-                        : "h-[300px] w-full sm:h-[360px]"
-                    }
+                        ? "h-[520px] sm:h-[650px]"
+                        : "h-[300px] sm:h-[360px]"
+                    }`}
                   />
                 </div>
               ))

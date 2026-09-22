@@ -18,7 +18,19 @@ async def get_photos():
         .order("sort_order")
         .execute()
     )
-    return result.data
+
+    photos = []
+
+    for photo in result.data:
+        signed = supabase.storage.from_("photos").create_signed_url(
+            photo["storage_path"],
+            60 * 60,
+        )
+
+        photo["url"] = signed["signedURL"]
+        photos.append(photo)
+
+    return photos
 
 @router.get("/photos/{storage_path:path}/url")
 async def get_photo_url(storage_path: str):

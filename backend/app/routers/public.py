@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from app.services.supabase import supabase
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/api")
 
@@ -17,8 +18,24 @@ async def get_photos():
         .order("sort_order")
         .execute()
     )
-
     return result.data
+
+@router.get("/photos/{storage_path:path}/url")
+async def get_photo_url(storage_path: str):
+    try:
+        result = supabase.storage.from_("photos").create_signed_url(
+            storage_path,
+            60 * 60,
+        )
+        return {
+            "url": result["signedURL"],
+        }
+
+    except Exception:
+        raise HTTPException(
+            status_code=404,
+            detail="Photo not found",
+        )
 
 @router.get("/pricing")
 async def get_pricing():

@@ -28,6 +28,7 @@ export interface Photo {
   sort_order: number;
   is_featured: boolean;
   is_published: boolean;
+  created_at?: string;
 }
 
 export interface PricingPackage {
@@ -38,6 +39,7 @@ export interface PricingPackage {
   currency: string;
   features: string[];
   sort_order: number;
+  is_published: boolean;
 }
 
 export const api = {

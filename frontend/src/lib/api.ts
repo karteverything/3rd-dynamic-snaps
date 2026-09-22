@@ -40,6 +40,7 @@ export interface PricingPackage {
   features: string[];
   sort_order: number;
   is_published: boolean;
+  url: string;
 }
 
 export const api = {

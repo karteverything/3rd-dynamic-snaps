@@ -1,76 +1,102 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+
 from app.services.supabase import supabase
-from fastapi import APIRouter, HTTPException
 
-router = APIRouter(prefix="/api")
+router = APIRouter(
+    prefix="/api/admin",
+    tags=["Admin"],
+)
 
-@router.get("/health")
-async def health():
-    return {"status": "ok"}
+class PhotoUpdate(BaseModel):
+    alt_text: str | None = None
+    caption: str | None = None
+    is_published: bool | None = None
+    is_featured: bool | None = None
+    sort_order: int | None = None
 
 @router.get("/photos")
-async def get_photos():
+async def get_admin_photos():
     result = (
         supabase
         .table("photos")
         .select("*")
-        .eq("is_published", True)
         .order("sort_order")
         .execute()
     )
-
     photos = []
 
     for photo in result.data:
-        signed = supabase.storage.from_("photos").create_signed_url(
-            photo["storage_path"],
-            60 * 60,
-        )
-
-        photo["url"] = signed["signedURL"]
+        try:
+            signed = supabase.storage.from_("photos").create_signed_url(
+                photo["storage_path"],
+                60 * 60,
+            )
+            photo["url"] = signed["signedURL"]
+        except Exception:
+            photo["url"] = None
         photos.append(photo)
-
     return photos
 
-@router.get("/photos/{storage_path:path}/url")
-async def get_photo_url(storage_path: str):
-    try:
-        result = supabase.storage.from_("photos").create_signed_url(
-            storage_path,
-            60 * 60,
-        )
-        return {
-            "url": result["signedURL"],
-        }
+@router.patch("/photos/{photo_id}")
+async def update_photo(
+    photo_id: str,
+    data: PhotoUpdate,
+):
+    updates = {
+        key: value
+        for key, value in data.model_dump().items()
+        if value is not None
+    }
 
-    except Exception:
+    if not updates:
+        raise HTTPException(
+            status_code=400,
+            detail="No changes supplied",
+        )
+    
+    result = (
+        supabase
+        .table("photos")
+        .update(updates)
+        .eq("id", photo_id)
+        .execute()
+    )
+
+    if not result.data:
+        raise HTTPException(
+            status_code=404,
+            detail="Photo not found",
+        )
+    return result.data[0]
+
+@router.delete("/photos/{photo_id}")
+async def delete_photo(photo_id: str):
+    result = (
+        supabase
+        .table("photos")
+        .select("storage_path")
+        .eq("id", photo_id)
+        .single()
+        .execute()
+    )
+
+    if not result.data:
         raise HTTPException(
             status_code=404,
             detail="Photo not found",
         )
 
-@router.get("/pricing")
-async def get_pricing():
-    result = (
-        supabase
-        .table("pricing_packages")
-        .select("*")
-        .eq("is_published", True)
-        .order("sort_order")
-        .execute()
-    )
-    return result.data
+    storage_path = result.data["storage_path"]
+    supabase.storage.from_("photos").remove([
+        storage_path
+    ])
 
-@router.get("/site")
-async def get_site_content():
-    result = (
-        supabase
-        .table("site_content")
-        .select("key, value")
-        .execute()
-    )
+    supabase.table("photos").delete().eq(
+        "id",
+        photo_id,
+    ).execute()
 
     return {
-        item["key"]: item["value"]
-        for item in result.data
+        "message": "Photo deleted successfully"
     }

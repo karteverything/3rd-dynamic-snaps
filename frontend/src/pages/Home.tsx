@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import PageLayout from "../components/PageLayout";
+import SafeImage from "../components/SafeImage";
 
 export default function Home() {
   return (
     <PageLayout>
       {/* Hero */}
       <section className="relative flex min-h-screen items-end overflow-hidden bg-neutral-950">
-        <img
+        <SafeImage
           src="../public/hero.jpg"
           alt="Featured photography"
           className="absolute inset-0 h-full w-full object-cover"
@@ -103,7 +104,7 @@ export default function Home() {
           <div className="mt-16 grid gap-5 md:grid-cols-2">
             {/* Large image */}
             <div className="image-hover md:row-span-2">
-              <img
+              <SafeImage
                 src="../public/photo-1.jpg"
                 alt="Photography work"
                 className="h-[520px] w-full object-cover sm:h-[650px]"
@@ -112,7 +113,7 @@ export default function Home() {
 
             {/* Top image */}
             <div className="image-hover">
-              <img
+              <SafeImage
                 src="../public/photo-2.jpg"
                 alt="Photography work"
                 className="h-[300px] w-full object-cover sm:h-[360px]"
@@ -121,7 +122,7 @@ export default function Home() {
 
             {/* Bottom image */}
             <div className="image-hover">
-              <img
+              <SafeImage
                 src="../public/photo-3.jpg"
                 alt="Photography work"
                 className="h-[300px] w-full object-cover sm:h-[360px]"

@@ -5,11 +5,9 @@ import PageLayout from "../components/PageLayout";
 import SafeImage from "../components/SafeImage";
 
 import { api, type Photo } from "../lib/api";
-import { getPhotoUrl } from "../lib/images";
 
 export default function Home() {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
   const [loadingPhotos, setLoadingPhotos] = useState(true);
 
   useEffect(() => {
@@ -17,19 +15,13 @@ export default function Home() {
       try {
         const data = await api.getPhotos();
         setPhotos(data);
-        const urls: Record<string, string> = {};
-
-        for (const photo of data) {
-          urls[photo.id] = await getPhotoUrl(photo.storage_path);
-        }
-
-        setPhotoUrls(urls);
       } catch (error) {
         console.error("Unable to load photos:", error);
       } finally {
         setLoadingPhotos(false);
       }
     }
+
     loadPhotos();
   }, []);
 
@@ -155,7 +147,7 @@ export default function Home() {
                   }`}
                 >
                   <SafeImage
-                    src={photoUrls[photo.id]}
+                    src={photo.url}
                     alt={photo.alt_text || photo.filename}
                     className={
                       index === 0

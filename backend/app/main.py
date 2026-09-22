@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import public
+from app.routers import public, admin
 
 app = FastAPI(
     title="Photographer API",
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(public.router)
+app.include_router(admin.router)
 
 @app.get("/api/health")
 async def health():

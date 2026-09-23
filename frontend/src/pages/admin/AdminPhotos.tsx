@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { api, type Photo } from "../../lib/api";
 import { supabase } from "../../lib/supabase";
 
+import AdminNav from "../../components/AdminNav";
+
 export default function AdminPhotos() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -195,6 +197,8 @@ export default function AdminPhotos() {
 
   return (
     <div className="min-h-screen bg-neutral-100">
+      <AdminNav />
+
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col gap-6 border-b border-neutral-300 pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>

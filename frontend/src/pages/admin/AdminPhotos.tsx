@@ -273,6 +273,20 @@ export default function AdminPhotos() {
                           <button
                             type="button"
                             onClick={() =>
+                              toggleFeatured(photo)
+                            }
+                            className={`border px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition ${
+                              photo.is_featured
+                                ? "border-black bg-black text-white"
+                                : "border-neutral-300 hover:bg-neutral-900 hover:text-white"
+                            }`}
+                          >
+                            {photo.is_featured ? "Featured" : "Set featured"}
+                          </button>
+                          
+                          <button
+                            type="button"
+                            onClick={() =>
                               togglePublished(photo)
                             }
                             className="border border-neutral-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-900 hover:text-white"

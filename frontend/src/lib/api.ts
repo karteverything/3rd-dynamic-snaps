@@ -31,9 +31,11 @@ async function getAuthHeaders() {
   } = await supabase.auth.getSession();
 
   if (!session) {
+    await supabase.auth.signOut();
+    window.location.href = "/admin/login";
+
     throw new Error("Not authenticated");
   }
-
   return {
     Authorization: `Bearer ${session.access_token}`,
   };
@@ -115,6 +117,24 @@ export const api = {
     );
   },
 
+  getMessages: async () => {
+    const headers = await getAuthHeaders();
+
+    return request<
+      {
+        id: string;
+        name: string;
+        email: string;
+        phone: string | null;
+        message: string;
+        is_read: boolean;
+        created_at: string;
+      }[]
+    >("/api/admin/messages", {
+      headers,
+    });
+  },
+
   getAdminPhotos: async () => {
     const headers = await getAuthHeaders();
 
@@ -158,5 +178,19 @@ export const api = {
         headers,
       },
     );
+  },
+
+  submitContact: async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    message: string;
+  }) => {
+    return request<{
+      message: string;
+    }>("/api/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
   },
 };

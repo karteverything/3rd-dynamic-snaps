@@ -1,12 +1,51 @@
 import { useState } from "react";
 import PageLayout from "../components/PageLayout";
+import { api } from "../lib/api";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
-    setSubmitted(true);
+
+    setSending(true);
+    setError("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const name = String(formData.get("name") || "");
+    const email = String(formData.get("email") || "");
+    const phone = String(formData.get("phone") || "");
+    const project = String(formData.get("project") || "");
+    const message = String(formData.get("message") || "");
+
+    const fullMessage = project
+      ? `Project type: ${project}\n\n${message}`
+      : message;
+
+    try {
+      await api.submitContact({
+        name,
+        email,
+        phone,
+        message: fullMessage,
+      });
+
+      setSubmitted(true);
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      setError(
+        "Something went wrong. Please try again.",
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -113,6 +152,14 @@ export default function Contact() {
                   onSubmit={handleSubmit}
                   className="border-t border-neutral-300"
                 >
+                  {error && (
+                    <div className="border-b border-red-200 py-5">
+                      <p className="text-sm text-red-600">
+                        {error}
+                      </p>
+                    </div>
+                  )}
+
                   {/* Name */}
                   <div className="border-b border-neutral-300 py-7">
                     <label
@@ -236,9 +283,10 @@ export default function Contact() {
 
                     <button
                       type="submit"
-                      className="w-fit bg-black px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-neutral-800"
+                      disabled={sending}
+                      className="w-fit bg-black px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-white transition duration-300 hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      Send enquiry
+                      {sending ? "Sending..." : "Send enquiry"}
                     </button>
                   </div>
                 </form>

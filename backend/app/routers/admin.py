@@ -1,11 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 
 from app.services.supabase import supabase
+from app.auth import require_admin
 
 router = APIRouter(
     prefix="/api/admin",
     tags=["Admin"],
+    dependencies=[Depends(require_admin)],
 )
 
 class PhotoUpdate(BaseModel):
@@ -176,3 +178,15 @@ async def update_pricing(
         )
 
     return result.data[0]
+
+@router.get("/messages")
+async def get_messages():
+    result = (
+        supabase
+        .table("contact_messages")
+        .select("*")
+        .order("created_at", desc=True)
+        .execute()
+    )
+
+    return result.data

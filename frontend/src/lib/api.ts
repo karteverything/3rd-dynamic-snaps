@@ -115,6 +115,24 @@ export const api = {
     );
   },
 
+  getMessages: async () => {
+    const headers = await getAuthHeaders();
+
+    return request<
+      {
+        id: string;
+        name: string;
+        email: string;
+        phone: string | null;
+        message: string;
+        is_read: boolean;
+        created_at: string;
+      }[]
+    >("/api/admin/messages", {
+      headers,
+    });
+  },
+
   getAdminPhotos: async () => {
     const headers = await getAuthHeaders();
 

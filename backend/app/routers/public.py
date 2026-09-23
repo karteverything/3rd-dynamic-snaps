@@ -1,7 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from app.services.supabase import supabase
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api")
+
+class ContactMessage(BaseModel):
+    name: str
+    email: str
+    phone: str | None = None
+    message: str
 
 @router.get("/health")
 async def health():
@@ -82,4 +89,30 @@ async def get_site_content():
     return {
         item["key"]: item["value"]
         for item in result.data
+    }
+
+@router.post("/contact")
+async def submit_contact_message(
+    data: ContactMessage,
+):
+    result = (
+        supabase
+        .table("contact_messages")
+        .insert({
+            "name": data.name,
+            "email": data.email,
+            "phone": data.phone,
+            "message": data.message,
+        })
+        .execute()
+    )
+
+    if not result.data:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to save contact message",
+        )
+
+    return {
+        "message": "Your message has been sent successfully.",
     }

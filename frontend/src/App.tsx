@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPhotos from "./pages/admin/AdminPhotos";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminAbout from "./pages/admin/AdminAbout";
+import AdminPricing from "./pages/admin/AdminPricing";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/admin" element={<Navigate to="/admin/photos" replace />} />
           <Route path="/admin/photos" element={<AdminPhotos />} />
           <Route path="/admin/about" element={<AdminAbout />} />
+          <Route path="/admin/pricing" element={<AdminPricing />} />
         </Route>
       </Routes>
     </BrowserRouter>

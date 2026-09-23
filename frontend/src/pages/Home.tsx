@@ -10,6 +10,10 @@ export default function Home() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loadingPhotos, setLoadingPhotos] = useState(true);
 
+  const featuredPhoto = photos.find(
+    (photo) => photo.is_featured,
+  );
+
   useEffect(() => {
     async function loadPhotos() {
       try {
@@ -30,13 +34,12 @@ export default function Home() {
       {/* Hero */}
       <section className="relative flex min-h-screen items-end overflow-hidden bg-neutral-950">
         <img
-          src="/hero.jpg"
-          alt="Featured photography"
-          className="absolute inset-0 h-full w-full object-cover"
+          src={featuredPhoto?.url || "/hero.jpg"}
+          alt={featuredPhoto?.alt_text || "Featured photography"}
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
         <div className="absolute inset-0 bg-black/45" />
-
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-40 sm:pb-20">

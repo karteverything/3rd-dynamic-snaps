@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const links = [
@@ -12,6 +12,19 @@ export default function Navbar() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const isHome = location.pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 20);
+    }
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   function closeMenu() {
     setMenuOpen(false);
@@ -19,15 +32,17 @@ export default function Navbar() {
 
   return (
     <header
-      className={`absolute left-0 right-0 top-0 z-50 ${
-        isHome && !menuOpen ? "text-white" : "text-neutral-950"
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+        isHome && !scrolled && !menuOpen
+          ? "text-white"
+          : "bg-white/95 text-neutral-950 shadow-sm backdrop-blur-md"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7">
         <NavLink
           to="/"
           onClick={closeMenu}
-          className="text-sm font-medium tracking-[0.12em]"
+          className="text-[21px] font-medium tracking-[0.12em]"
         >
           3RD DYNAMIC SNAPS
         </NavLink>

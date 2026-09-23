@@ -14,6 +14,7 @@ async def get_photos():
         .table("photos")
         .select("*")
         .eq("is_published", True)
+        .order("is_featured", desc=True)
         .order("sort_order")
         .execute()
     )

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import PageLayout from "../components/PageLayout";
 
+import { useEffect, useState } from "react";
+import { api, type PricingPackage } from "../lib/api";
+
 const packages = [
   {
     number: "01",
@@ -44,6 +47,23 @@ const packages = [
 ];
 
 export default function Pricing() {
+  const [packages, setPackages] = useState<PricingPackage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPricing() {
+      try {
+        const data = await api.getPricing();
+        setPackages(data);
+      } catch (error) {
+        console.error("Failed to load pricing:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPricing();
+  }, []);
   return (
     <PageLayout>
       {/* Intro */}
@@ -76,66 +96,80 @@ export default function Pricing() {
       <section className="bg-neutral-100 px-6 py-28 sm:py-36 lg:py-44">
         <div className="mx-auto max-w-7xl">
           <div className="border-t border-neutral-300">
-            {packages.map((pkg) => (
-              <article
-                key={pkg.name}
-                className="grid gap-10 border-b border-neutral-300 py-12 sm:py-16 lg:grid-cols-12 lg:gap-8"
-              >
-                {/* Number */}
-                <div className="lg:col-span-1">
-                  <span className="text-xs text-neutral-400">
-                    {pkg.number}
-                  </span>
-                </div>
+            {loading ? (
+              <div className="py-12">
+                <p className="text-sm text-neutral-400">
+                  Loading pricing...
+                </p>
+              </div>
+            ) : packages.length === 0 ? (
+              <div className="py-12">
+                <p className="text-sm text-neutral-400">
+                  Pricing information coming soon.
+                </p>
+              </div>
+            ) : (
+              packages.map((pkg, index) => (
+                <article
+                  key={pkg.id}
+                  className="grid gap-10 border-b border-neutral-300 py-12 sm:py-16 lg:grid-cols-12 lg:gap-8"
+                >
+                  {/* Number */}
+                  <div className="lg:col-span-1">
+                    <span className="text-xs text-neutral-400">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </div>
 
-                {/* Package name */}
-                <div className="lg:col-span-4">
-                  <h2 className="text-4xl font-light tracking-tight sm:text-5xl">
-                    {pkg.name}
-                  </h2>
+                  {/* Package name */}
+                  <div className="lg:col-span-4">
+                    <h2 className="text-4xl font-light tracking-tight sm:text-5xl">
+                      {pkg.name}
+                    </h2>
 
-                  <p className="mt-5 max-w-sm text-sm leading-7 text-neutral-500">
-                    {pkg.description}
-                  </p>
-                </div>
+                    <p className="mt-5 max-w-sm text-sm leading-7 text-neutral-500">
+                      {pkg.description}
+                    </p>
+                  </div>
 
-                {/* Features */}
-                <div className="lg:col-span-4">
-                  <p className="eyebrow mb-5 text-neutral-400">
-                    Includes
-                  </p>
+                  {/* Features */}
+                  <div className="lg:col-span-4">
+                    <p className="eyebrow mb-5 text-neutral-400">
+                      Includes
+                    </p>
 
-                  <ul className="space-y-3 text-sm text-neutral-600">
-                    {pkg.features.map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex gap-3"
-                      >
-                        <span className="text-neutral-400">
-                          —
-                        </span>
+                    <ul className="space-y-3 text-sm text-neutral-600">
+                      {pkg.features.map((feature, featureIndex) => (
+                        <li
+                          key={`${pkg.id}-${featureIndex}`}
+                          className="flex gap-3"
+                        >
+                          <span className="text-neutral-400">
+                            —
+                          </span>
 
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* Price */}
-                <div className="lg:col-span-3 lg:text-right">
-                  <p className="text-3xl font-light tracking-tight sm:text-4xl">
-                    {pkg.price}
-                  </p>
+                  {/* Price */}
+                  <div className="lg:col-span-3 lg:text-right">
+                    <p className="text-3xl font-light tracking-tight sm:text-4xl">
+                      {pkg.currency} {pkg.price ?? "—"}
+                    </p>
 
-                  <Link
-                    to="/contact"
-                    className="mt-7 inline-block border border-neutral-900 px-6 py-3 text-[10px] uppercase tracking-[0.2em] transition duration-300 hover:bg-neutral-900 hover:text-white"
-                  >
-                    Enquire
-                  </Link>
-                </div>
-              </article>
-            ))}
+                    <Link
+                      to="/contact"
+                      className="mt-7 inline-block border border-neutral-900 px-6 py-3 text-[10px] uppercase tracking-[0.2em] transition duration-300 hover:bg-neutral-900 hover:text-white"
+                    >
+                      Enquire
+                    </Link>
+                  </div>
+                </article>
+              ))
+            )}
           </div>
         </div>
       </section>

@@ -115,16 +115,38 @@ export default function AdminPhotos() {
     }
   }
 
-  async function togglePublished(photo: Photo) {
+  async function toggleFeatured(photo: Photo) {
     try {
+      // If this photo is already featured, simply turn it off.
+      if (photo.is_featured) {
+        await api.updatePhoto(photo.id, {
+          is_featured: false,
+        });
+
+        await loadPhotos();
+        return;
+      }
+
+      // Remove featured status from every other photo.
+      await Promise.all(
+        photos
+          .filter((item) => item.is_featured && item.id !== photo.id)
+          .map((item) =>
+            api.updatePhoto(item.id, {
+              is_featured: false,
+            }),
+          ),
+      );
+
+      // Make this photo featured.
       await api.updatePhoto(photo.id, {
-        is_published: !photo.is_published,
+        is_featured: true,
       });
 
       await loadPhotos();
     } catch (error) {
       console.error(error);
-      setMessage("Failed to update photo.");
+      setMessage("Failed to update featured photo.");
     }
   }
 

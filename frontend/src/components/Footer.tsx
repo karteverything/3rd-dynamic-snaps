@@ -1,23 +1,20 @@
 export default function Footer() {
   return (
-    <footer className="bg-neutral-950 text-white">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-sm font-medium tracking-[0.12em]">
-              3RD DYNAMIC SNAPS
-            </p>
+    <footer className="bg-neutral-950 px-6 py-10 text-white">
+      <div className="mx-auto max-w-7xl border-t border-white/10 pt-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-white/50">
+            © {new Date().getFullYear()} 3rd Dynamic Snaps
+          </p>
 
-            <p className="mt-4 max-w-sm text-sm leading-7 text-white/50">
-              Photography focused on authentic moments,
-              meaningful stories and timeless imagery.
-            </p>
-          </div>
-
-          <div className="text-sm text-white/50">
-            <p>South Africa</p>
-            <p className="mt-2">© 2026 3rd Dynamic Snaps</p>
-          </div>
+          <a
+            href="https://karteverything.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-white/50"
+          >
+            Created by KArtEverything
+          </a>
         </div>
       </div>
     </footer>

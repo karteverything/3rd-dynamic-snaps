@@ -1,11 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 
 from app.services.supabase import supabase
+from app.auth import require_admin
 
 router = APIRouter(
     prefix="/api/admin",
     tags=["Admin"],
+    dependencies=[Depends(require_admin)],
 )
 
 class PhotoUpdate(BaseModel):

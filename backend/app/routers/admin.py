@@ -15,6 +15,9 @@ class PhotoUpdate(BaseModel):
     is_featured: bool | None = None
     sort_order: int | None = None
 
+class SiteContentUpdate(BaseModel):
+    value: str
+
 @router.get("/photos")
 async def get_admin_photos():
     result = (
@@ -106,3 +109,29 @@ async def delete_photo(photo_id: str):
     return {
         "message": "Photo deleted successfully"
     }
+
+@router.put("/site/{key}")
+async def update_site_content(
+    key: str,
+    data: SiteContentUpdate,
+):
+    result = (
+        supabase
+        .table("site_content")
+        .upsert(
+            {
+                "key": key,
+                "value": data.value,
+            },
+            on_conflict="key",
+        )
+        .execute()
+    )
+
+    if not result.data:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to save site content",
+        )
+
+    return result.data[0]

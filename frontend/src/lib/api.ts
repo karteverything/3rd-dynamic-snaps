@@ -31,9 +31,11 @@ async function getAuthHeaders() {
   } = await supabase.auth.getSession();
 
   if (!session) {
+    await supabase.auth.signOut();
+    window.location.href = "/admin/login";
+
     throw new Error("Not authenticated");
   }
-
   return {
     Authorization: `Bearer ${session.access_token}`,
   };

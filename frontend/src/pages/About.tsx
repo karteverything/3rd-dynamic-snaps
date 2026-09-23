@@ -1,7 +1,27 @@
 import { Link } from "react-router-dom";
 import PageLayout from "../components/PageLayout";
 
+import { useEffect, useState } from "react";
+import { api } from "../lib/api";
+
 export default function About() {
+  const [aboutContent, setAboutContent] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadAbout() {
+      try {
+        const data = await api.getSiteContent();
+        setAboutContent(data.about || "");
+      } catch (error) {
+        console.error("Failed to load About content:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadAbout();
+  }, []);
+
   return (
     <PageLayout>
       {/* Intro */}
@@ -21,9 +41,7 @@ export default function About() {
 
           <div className="lg:col-span-4 lg:flex lg:items-end">
             <p className="body-copy max-w-md">
-              A photographer with a simple goal: to create
-              images that feel as real as the moments they
-              represent.
+              {loading ? "Loading..." : aboutContent}
             </p>
           </div>
         </div>

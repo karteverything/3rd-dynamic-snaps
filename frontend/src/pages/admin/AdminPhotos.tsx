@@ -115,6 +115,19 @@ export default function AdminPhotos() {
     }
   }
 
+  async function togglePublished(photo: Photo) {
+    try {
+      await api.updatePhoto(photo.id, {
+        is_published: !photo.is_published,
+      });
+
+      await loadPhotos();
+    } catch (error) {
+      console.error(error);
+      setMessage("Failed to update photo.");
+    }
+  }
+
   async function toggleFeatured(photo: Photo) {
     try {
       // If this photo is already featured, simply turn it off.

@@ -159,4 +159,18 @@ export const api = {
       },
     );
   },
+
+  submitContact: async (data: {
+    name: string;
+    email: string;
+    phone?: string;
+    message: string;
+  }) => {
+    return request<{
+      message: string;
+    }>("/api/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
 };

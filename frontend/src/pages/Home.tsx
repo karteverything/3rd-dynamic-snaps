@@ -42,13 +42,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/45" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-40 sm:pb-20">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-32 sm:pb-24 sm:pt-36">
           <div className="max-w-6xl">
-            <p className="eyebrow text-white/60">
-              3rd Dynamic Snaps
-            </p>
-
-            <h1 className="page-title mt-7 text-white">
+            <h1 className="page-title text-white">
               Moments worth
               <br />
               remembering.

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api, type Photo } from "../../lib/api";
 import { supabase } from "../../lib/supabase";
 
-import AdminNav from "../../components/AdminNav";
+import AdminNav from "../../pages/admin/AdminNav";
 
 export default function AdminPhotos() {
   const [photos, setPhotos] = useState<Photo[]>([]);

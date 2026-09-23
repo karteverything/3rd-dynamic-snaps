@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, type PricingPackage } from "../../lib/api";
 
-import AdminNav from "../../components/AdminNav";
+import AdminNav from "../../pages/admin/AdminNav";
 
 export default function AdminPricing() {
   const [packages, setPackages] = useState<PricingPackage[]>([]);
@@ -100,7 +100,7 @@ export default function AdminPricing() {
   return (
     <div className="min-h-screen bg-neutral-100">
       <AdminNav />
-      
+
       <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="border-b border-neutral-300 pb-8">
           <p className="eyebrow text-neutral-400">

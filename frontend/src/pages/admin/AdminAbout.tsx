@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 
-import AdminNav from "../../components/AdminNav";
+import AdminNav from "../../pages/admin/AdminNav";
 
 export default function AdminAbout() {
   const [content, setContent] = useState("");
@@ -53,7 +53,7 @@ export default function AdminAbout() {
   return (
     <div className="min-h-screen bg-neutral-100">
       <AdminNav />
-      
+
       <div className="mx-auto max-w-4xl px-6 py-12">
         <div className="border-b border-neutral-300 pb-8">
           <p className="eyebrow text-neutral-400">

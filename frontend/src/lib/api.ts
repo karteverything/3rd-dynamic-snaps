@@ -89,6 +89,32 @@ export const api = {
     );
   },
 
+  updatePricing: async (
+    packageId: string,
+    updates: Partial<
+      Pick<
+        PricingPackage,
+        | "name"
+        | "description"
+        | "price"
+        | "currency"
+        | "features"
+        | "is_published"
+      >
+    >,
+  ) => {
+    const headers = await getAuthHeaders();
+
+    return request<PricingPackage>(
+      `/api/admin/pricing/${packageId}`,
+      {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify(updates),
+      },
+    );
+  },
+
   getAdminPhotos: async () => {
     const headers = await getAuthHeaders();
 

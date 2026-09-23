@@ -171,6 +171,32 @@ export default function AdminPhotos() {
                       ? "Unpublish"
                       : "Publish"}
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const confirmed = window.confirm(
+                        `Delete "${photo.filename}"? This cannot be undone.`,
+                      );
+
+                      if (!confirmed) {
+                        return;
+                      }
+
+                      try {
+                        await api.deletePhoto(photo.id);
+
+                        setMessage("Photo deleted successfully.");
+                        await loadPhotos();
+                      } catch (error) {
+                        console.error(error);
+                        setMessage("Failed to delete photo.");
+                      }
+                    }}
+                    className="ml-3 mt-5 border border-red-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-red-600 transition hover:bg-red-600 hover:text-white"
+                  >
+                    Delete
+                  </button>
                 </div>
               </article>
             ))}

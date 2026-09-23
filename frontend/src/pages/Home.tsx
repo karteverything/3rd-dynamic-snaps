@@ -147,7 +147,7 @@ export default function Home() {
                   }`}
                 >
                   <SafeImage
-                    src={photo.url}
+                    src={photo.url || undefined}
                     alt={photo.alt_text || "Photography work"}
                     className={`w-full object-cover ${
                       index === 0

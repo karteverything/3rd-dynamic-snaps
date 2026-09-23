@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
 import { api, type Photo } from "../../lib/api";
+import { supabase } from "../../lib/supabase";
 
 export default function AdminPhotos() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editAltText, setEditAltText] = useState("");
+  const [editCaption, setEditCaption] = useState("");
+  const [saving, setSaving] = useState(false);
 
   async function loadPhotos() {
     setLoading(true);
@@ -76,6 +81,73 @@ export default function AdminPhotos() {
     }
   }
 
+  function startEditing(photo: Photo) {
+    setEditingId(photo.id);
+    setEditAltText(photo.alt_text);
+    setEditCaption(photo.caption);
+    setMessage("");
+  }
+
+  function cancelEditing() {
+    setEditingId(null);
+    setEditAltText("");
+    setEditCaption("");
+  }
+
+  async function savePhoto(photoId: string) {
+    setSaving(true);
+    setMessage("");
+
+    try {
+      await api.updatePhoto(photoId, {
+        alt_text: editAltText,
+        caption: editCaption,
+      });
+
+      setMessage("Photo details saved.");
+      cancelEditing();
+      await loadPhotos();
+    } catch (error) {
+      console.error(error);
+      setMessage("Failed to save photo details.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function togglePublished(photo: Photo) {
+    try {
+      await api.updatePhoto(photo.id, {
+        is_published: !photo.is_published,
+      });
+
+      await loadPhotos();
+    } catch (error) {
+      console.error(error);
+      setMessage("Failed to update photo.");
+    }
+  }
+
+  async function deletePhoto(photo: Photo) {
+    const confirmed = window.confirm(
+      `Delete "${photo.filename}"? This cannot be undone.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await api.deletePhoto(photo.id);
+
+      setMessage("Photo deleted successfully.");
+      await loadPhotos();
+    } catch (error) {
+      console.error(error);
+      setMessage("Failed to delete photo.");
+    }
+  }
+
   if (loading) {
     return (
       <div className="p-8">
@@ -124,82 +196,152 @@ export default function AdminPhotos() {
         {photos.length === 0 ? (
           <div className="py-20">
             <p className="text-sm text-neutral-500">
-              No published photos yet.
+              No photos yet.
             </p>
           </div>
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {photos.map((photo) => (
-              <article
-                key={photo.id}
-                className="bg-white"
-              >
-                <img
-                  src={photo.url}
-                  alt={photo.alt_text}
-                  className="aspect-[4/3] w-full object-cover"
-                />
+            {photos.map((photo) => {
+              const isEditing = editingId === photo.id;
 
-                <div className="p-5">
-                  <p className="text-sm font-medium">
-                    {photo.filename}
-                  </p>
+              return (
+                <article
+                  key={photo.id}
+                  className="overflow-hidden bg-white"
+                >
+                  <img
+                    src={photo.url ?? ""}
+                    alt={photo.alt_text}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
 
-                  <p className="mt-2 text-xs text-neutral-400">
-                    {photo.is_published
-                      ? "Published"
-                      : "Unpublished"}
-                  </p>
+                  <div className="p-5">
+                    {!isEditing ? (
+                      <>
+                        <p className="text-sm font-medium">
+                          {photo.filename}
+                        </p>
 
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        await api.updatePhoto(photo.id, {
-                          is_published: !photo.is_published,
-                        });
+                        <p className="mt-2 text-xs text-neutral-400">
+                          {photo.is_published
+                            ? "Published"
+                            : "Unpublished"}
+                        </p>
 
-                        await loadPhotos();
-                      } catch (error) {
-                        console.error(error);
-                        setMessage("Failed to update photo.");
-                      }
-                    }}
-                    className="mt-5 border border-neutral-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-900 hover:text-white"
-                  >
-                    {photo.is_published
-                      ? "Unpublish"
-                      : "Publish"}
-                  </button>
+                        {photo.caption && (
+                          <p className="mt-4 text-sm leading-6 text-neutral-500">
+                            {photo.caption}
+                          </p>
+                        )}
 
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      const confirmed = window.confirm(
-                        `Delete "${photo.filename}"? This cannot be undone.`,
-                      );
+                        <div className="mt-5 flex flex-wrap gap-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              togglePublished(photo)
+                            }
+                            className="border border-neutral-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-900 hover:text-white"
+                          >
+                            {photo.is_published
+                              ? "Unpublish"
+                              : "Publish"}
+                          </button>
 
-                      if (!confirmed) {
-                        return;
-                      }
+                          <button
+                            type="button"
+                            onClick={() =>
+                              startEditing(photo)
+                            }
+                            className="border border-neutral-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-900 hover:text-white"
+                          >
+                            Edit
+                          </button>
 
-                      try {
-                        await api.deletePhoto(photo.id);
+                          <button
+                            type="button"
+                            onClick={() =>
+                              deletePhoto(photo)
+                            }
+                            className="border border-red-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-red-600 transition hover:bg-red-600 hover:text-white"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div>
+                        <p className="text-sm font-medium">
+                          {photo.filename}
+                        </p>
 
-                        setMessage("Photo deleted successfully.");
-                        await loadPhotos();
-                      } catch (error) {
-                        console.error(error);
-                        setMessage("Failed to delete photo.");
-                      }
-                    }}
-                    className="ml-3 mt-5 border border-red-300 px-4 py-3 text-[10px] uppercase tracking-[0.2em] text-red-600 transition hover:bg-red-600 hover:text-white"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </article>
-            ))}
+                        <div className="mt-6">
+                          <label
+                            htmlFor={`alt-${photo.id}`}
+                            className="eyebrow text-neutral-400"
+                          >
+                            Alt text
+                          </label>
+
+                          <input
+                            id={`alt-${photo.id}`}
+                            value={editAltText}
+                            onChange={(event) =>
+                              setEditAltText(
+                                event.target.value,
+                              )
+                            }
+                            className="mt-3 w-full border-b border-neutral-300 bg-transparent py-2 text-sm outline-none focus:border-neutral-900"
+                          />
+                        </div>
+
+                        <div className="mt-6">
+                          <label
+                            htmlFor={`caption-${photo.id}`}
+                            className="eyebrow text-neutral-400"
+                          >
+                            Caption
+                          </label>
+
+                          <textarea
+                            id={`caption-${photo.id}`}
+                            value={editCaption}
+                            onChange={(event) =>
+                              setEditCaption(
+                                event.target.value,
+                              )
+                            }
+                            rows={4}
+                            className="mt-3 w-full resize-none border-b border-neutral-300 bg-transparent py-2 text-sm leading-6 outline-none focus:border-neutral-900"
+                          />
+                        </div>
+
+                        <div className="mt-6 flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              savePhoto(photo.id)
+                            }
+                            disabled={saving}
+                            className="bg-black px-5 py-3 text-[10px] uppercase tracking-[0.2em] text-white transition hover:bg-neutral-800 disabled:opacity-50"
+                          >
+                            {saving ? "Saving..." : "Save"}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={cancelEditing}
+                            disabled={saving}
+                            className="border border-neutral-300 px-5 py-3 text-[10px] uppercase tracking-[0.2em] transition hover:bg-neutral-200"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </div>

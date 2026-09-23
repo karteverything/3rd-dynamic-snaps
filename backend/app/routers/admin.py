@@ -176,3 +176,15 @@ async def update_pricing(
         )
 
     return result.data[0]
+
+@router.get("/messages")
+async def get_messages():
+    result = (
+        supabase
+        .table("contact_messages")
+        .select("*")
+        .order("created_at", desc=True)
+        .execute()
+    )
+
+    return result.data

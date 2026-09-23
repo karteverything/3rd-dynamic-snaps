@@ -18,6 +18,14 @@ class PhotoUpdate(BaseModel):
 class SiteContentUpdate(BaseModel):
     value: str
 
+class PricingUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+    price: float | None = None
+    currency: str | None = None
+    features: list[str] | None = None
+    is_published: bool | None = None
+
 @router.get("/photos")
 async def get_admin_photos():
     result = (
@@ -132,6 +140,39 @@ async def update_site_content(
         raise HTTPException(
             status_code=500,
             detail="Failed to save site content",
+        )
+
+    return result.data[0]
+
+@router.patch("/pricing/{package_id}")
+async def update_pricing(
+    package_id: str,
+    data: PricingUpdate,
+):
+    updates = {
+        key: value
+        for key, value in data.model_dump().items()
+        if value is not None
+    }
+
+    if not updates:
+        raise HTTPException(
+            status_code=400,
+            detail="No changes supplied",
+        )
+
+    result = (
+        supabase
+        .table("pricing_packages")
+        .update(updates)
+        .eq("id", package_id)
+        .execute()
+    )
+
+    if not result.data:
+        raise HTTPException(
+            status_code=404,
+            detail="Pricing package not found",
         )
 
     return result.data[0]

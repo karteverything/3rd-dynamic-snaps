@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import AdminPhotos from "./pages/admin/AdminPhotos";
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminAbout from "./pages/admin/AdminAbout";
 
 function App() {
   return (
@@ -23,9 +24,11 @@ function App() {
         <Route path="/contact" element={<Contact />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />
+        
         <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<Navigate to="/admin/photos" replace />} />
           <Route path="/admin/photos" element={<AdminPhotos />} />
+          <Route path="/admin/about" element={<AdminAbout />} />
         </Route>
       </Routes>
     </BrowserRouter>

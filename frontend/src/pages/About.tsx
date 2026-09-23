@@ -37,7 +37,7 @@ export default function About() {
             <div className="lg:col-span-7">
               <div className="image-hover">
                 <img
-                  src="../public/about.jpg"
+                  src="/about.jpg"
                   alt="Photographer"
                   className="aspect-[4/5] w-full object-cover sm:aspect-[5/6]"
                 />

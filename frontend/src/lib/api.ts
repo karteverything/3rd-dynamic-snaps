@@ -73,6 +73,22 @@ export const api = {
   getSiteContent: () =>
     request<Record<string, string>>("/api/site"),
 
+  updateSiteContent: async (
+    key: string,
+    value: string,
+  ) => {
+    const headers = await getAuthHeaders();
+
+    return request<{ key: string; value: string }>(
+      `/api/admin/site/${key}`,
+      {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ value }),
+      },
+    );
+  },
+
   getAdminPhotos: async () => {
     const headers = await getAuthHeaders();
 

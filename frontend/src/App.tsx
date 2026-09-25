@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -13,6 +13,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminAbout from "./pages/admin/AdminAbout";
 import AdminPricing from "./pages/admin/AdminPricing";
 import AdminMessages from "./pages/admin/AdminMessages";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         
         <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<Navigate to="/admin/photos" replace />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/photos" element={<AdminPhotos />} />
           <Route path="/admin/about" element={<AdminAbout />} />
           <Route path="/admin/pricing" element={<AdminPricing />} />

@@ -4,48 +4,6 @@ import PageLayout from "../components/PageLayout";
 import { useEffect, useState } from "react";
 import { api, type PricingPackage } from "../lib/api";
 
-const packages = [
-  {
-    number: "01",
-    name: "Portrait",
-    price: "R1,500",
-    description:
-      "A relaxed portrait session focused on natural expressions and authentic moments.",
-    features: [
-      "1 hour session",
-      "1 location",
-      "15 edited photographs",
-      "Private online gallery",
-    ],
-  },
-  {
-    number: "02",
-    name: "Event",
-    price: "R3,500",
-    description:
-      "Photography coverage that captures the atmosphere, people and moments of your event.",
-    features: [
-      "Up to 4 hours",
-      "Event coverage",
-      "100+ edited photographs",
-      "Private online gallery",
-    ],
-  },
-  {
-    number: "03",
-    name: "Custom",
-    price: "Let's talk",
-    description:
-      "For projects that require a more tailored approach, multiple locations or extended coverage.",
-    features: [
-      "Custom shoot duration",
-      "Multiple locations",
-      "Tailored deliverables",
-      "Project consultation",
-    ],
-  },
-];
-
 export default function Pricing() {
   const [packages, setPackages] = useState<PricingPackage[]>([]);
   const [loading, setLoading] = useState(true);

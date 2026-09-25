@@ -42,13 +42,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/45" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 pt-40 sm:pb-20">
-          <div className="max-w-6xl">
-            <p className="eyebrow text-white/60">
-              3rd Dynamic Snaps
-            </p>
-
-            <h1 className="page-title mt-7 text-white">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 pt-32 sm:pb-24 sm:pt-36">
+          <div className="max-w-6xl page-center">
+            <h1 className="page-title text-white">
               Moments worth
               <br />
               remembering.
@@ -86,7 +82,7 @@ export default function Home() {
               honest and timeless.
             </h2>
 
-            <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+            <div className="mt-10">
               <p className="body-copy max-w-xl">
                 The best photographs don't feel forced.
                 They're moments that happen naturally,
@@ -95,7 +91,7 @@ export default function Home() {
 
               <Link
                 to="/about"
-                className="w-fit shrink-0 text-[11px] uppercase tracking-[0.2em] underline underline-offset-8 transition-opacity hover:opacity-50"
+                className="mt-8 inline-block text-[11px] uppercase tracking-[0.2em] underline underline-offset-8 transition-opacity hover:opacity-50"
               >
                 About the photographer
               </Link>
@@ -151,7 +147,7 @@ export default function Home() {
                   }`}
                 >
                   <SafeImage
-                    src={photo.url}
+                    src={photo.url || undefined}
                     alt={photo.alt_text || "Photography work"}
                     className={`w-full object-cover ${
                       index === 0

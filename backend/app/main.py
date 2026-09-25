@@ -14,7 +14,7 @@ app.add_middleware(
         "https://3rd-dynamic-snaps.vercel.app/",
     ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 

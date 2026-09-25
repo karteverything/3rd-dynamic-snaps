@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.routers import public, admin
 
 app = FastAPI(
@@ -11,16 +12,16 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://3rd-dynamic-snaps.vercel.app/",
+        "https://3rd-dynamic-snaps.vercel.app",
     ],
-    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(public.router)
 app.include_router(admin.router)
+
 
 @app.get("/api/health")
 async def health():

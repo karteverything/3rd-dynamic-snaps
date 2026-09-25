@@ -13,6 +13,7 @@ app.add_middleware(
         "http://localhost:5173",
         "https://3rd-dynamic-snaps.vercel.app/",
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
